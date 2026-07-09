@@ -716,6 +716,24 @@ body {
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
 /* Footer */
+.admin-only { display: none !important; }
+body.admin-mode .admin-only { display: inline !important; }
+body.admin-mode #admin-bar { display: flex !important; }
+#admin-bar {
+  display: none !important;
+  position: fixed; bottom: 12px; right: 12px; z-index: 9999;
+  background: rgba(0,0,0,0.85); border: 1px solid var(--accent-purple);
+  border-radius: 8px; padding: 8px 16px;
+  font-size: 12px; color: var(--accent-purple);
+  align-items: center; gap: 10px;
+  backdrop-filter: blur(8px);
+}
+#admin-bar button {
+  background: transparent; border: 1px solid var(--accent-purple);
+  color: var(--accent-purple); padding: 3px 10px; border-radius: 4px;
+  cursor: pointer; font-size: 11px;
+}
+#admin-bar button:hover { background: var(--accent-purple); color: #fff; }
 .footer {
   border-top: 1px solid var(--border);
   padding: 24px 32px;
@@ -1043,9 +1061,16 @@ body {
   <p style="margin-top:4px">数据来源：中智薪酬报告 · BOSS直聘 · 猎聘 · 上市公司年报 · 国家统计局 | 本数据仅供参考，不替决策</p>
   <p style="margin-top:8px">
     <a href="#">关于指数</a> · <a href="#">方法论</a> · <a href="#">数据来源</a> · <a href="#">合规声明</a>
-    · <a href="#" onclick="HAAnalytics.exportLogs(); return false;" style="color:var(--accent-purple)">导出访问日志</a>
+    · <a href="#" onclick="HAAnalytics.exportLogs(); return false;" class="admin-only" style="color:var(--accent-purple)">导出访问日志</a>
   </p>
 </footer>
+
+<!-- Admin control bar (hidden unless admin mode activated) -->
+<div id="admin-bar">
+  <span>🔒 管理员模式</span>
+  <button onclick="HAAdmin.exportLogs()">导出日志</button>
+  <button onclick="HAAdmin.logout()">退出管理员</button>
+</div>
 
 <script src="js/app.js"></script>
 </body>
