@@ -1,3 +1,49 @@
+// --- Admin Authentication ---
+const HAAdmin = {
+  // 管理员密钥 - 只有你知道这个值，访问时在URL后加 ?admin=密钥 即可激活
+  SECRET_KEY: 'HASL7x9K2m',
+
+  init() {
+    const params = new URLSearchParams(window.location.search);
+    const adminKey = params.get('admin');
+    if (adminKey === this.SECRET_KEY) {
+      localStorage.setItem('ha_admin_auth', this.SECRET_KEY);
+      // Clean URL to hide the secret key from address bar
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+    this._checkStatus();
+  },
+
+  _checkStatus() {
+    const stored = localStorage.getItem('ha_admin_auth');
+    if (stored === this.SECRET_KEY) {
+      document.body.classList.add('admin-mode');
+      HAAnalytics.trackClick('admin', 'login', 'success');
+    }
+  },
+
+  isActive() {
+    return localStorage.getItem('ha_admin_auth') === this.SECRET_KEY;
+  },
+
+  logout() {
+    localStorage.removeItem('ha_admin_auth');
+    document.body.classList.remove('admin-mode');
+    HAAnalytics.trackClick('admin', 'logout', 'success');
+    // Show confirmation
+    const bar = document.getElementById('admin-bar');
+    if (bar) {
+      bar.innerHTML = '<span style="color:#4ade80">✅ 已退出管理员模式</span>';
+      setTimeout(() => { bar.style.display = 'none'; }, 2000);
+    }
+  },
+
+  exportLogs() {
+    if (!this.isActive()) return;
+    HAAnalytics.exportLogs();
+  }
+};
+
 // --- Analytics & Operation Logger ---
 const HAAnalytics = {
   sessionId: null,
@@ -79,6 +125,7 @@ const HAAnalytics = {
   'use strict';
 
   // Init analytics
+  HAAdmin.init();
   HAAnalytics.init();
 
   // --- Data ---
