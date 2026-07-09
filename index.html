@@ -734,6 +734,9 @@ body.admin-mode #admin-bar { display: flex !important; }
   cursor: pointer; font-size: 11px;
 }
 #admin-bar button:hover { background: var(--accent-purple); color: #fff; }
+/* 管理员专属元素：普通访问者不可见 */
+.admin-only { display: none !important; }
+body.admin-mode .admin-only { display: inline !important; }
 .footer {
   border-top: 1px solid var(--border);
   padding: 24px 32px;
