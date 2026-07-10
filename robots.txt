@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://inn-laly.github.io/ha-salary-index/sitemap.xml
